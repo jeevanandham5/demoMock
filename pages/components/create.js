@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "@/styles/Home.module.css";
 import Link from "next/link";
 import Button from "@mui/material/Button";
-import { API, API_URL } from "../api/users";
+import { API_URL } from "../api/users";
 import {
   Box,
   Checkbox,
@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const Newbox = styled(Box)({
   background: "#d5d9d2",
@@ -26,9 +27,19 @@ const Create = () => {
   const [FirstName, setFirstName] = useState("");
   const [LastName, setLastName] = useState("");
   const [Checked, setChecked] = useState(false);
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push("/components/read");
+  };
 
   const postdata = async () => {
-    await axios.post(API_URL, { FirstName, LastName, Checked });
+    const data = document.getElementById("data").value;
+    if (data == "") {
+      alert("plz give some data");
+    } else {
+      await axios.post(API_URL, { FirstName, LastName, Checked });
+    }
   };
   return (
     <main className={styles.main}>
@@ -54,6 +65,7 @@ const Create = () => {
               variant="outlined"
               value={FirstName}
               label="First Name"
+              id="data"
               type={"text"}
               onChange={(event) => setFirstName(event.target.value)}
             ></TextField>
@@ -67,6 +79,7 @@ const Create = () => {
             </Typography>
             <TextField
               variant="outlined"
+              id="data"
               value={LastName}
               type={"text"}
               label="Last Name"
@@ -90,15 +103,14 @@ const Create = () => {
         </Link>
       </Newbox>
 
-      <Link href="/">
-        <Button
-          variant="contained"
-          size="large"
-          sx={{ marginTop: "50px", padding: "20px" }}
-        >
-          Back to home
-        </Button>
-      </Link>
+      <Button
+        variant="contained"
+        size="large"
+        sx={{ marginTop: "50px", padding: "20px" }}
+        onClick={handleClick}
+      >
+        Back to home
+      </Button>
     </main>
   );
 };

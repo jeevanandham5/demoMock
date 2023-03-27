@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/Home.module.css";
+import { useRouter } from "next/router";
 import {
   Box,
   Button,
@@ -17,17 +18,12 @@ const Update = () => {
   const [FirstName, setFirstName] = useState("");
   const [LastName, setLastName] = useState("");
   const [id, setId] = useState("");
+  const router = useRouter();
 
   const updateUser = async () => {
     await axios.put(API_URL + id, { FirstName, LastName });
+    router.push("/components/read");
   };
- 
-  useEffect(() => {
-    setId(localStorage.getItem("id"));
-    setFirstName(localStorage.getItem("firstName"));
-    setLastName(localStorage.getItem("lastName"));
-    
-  }, []);
 
   const Newbox = styled(Box)({
     background: "#d5d9d2",
@@ -35,6 +31,11 @@ const Update = () => {
     padding: "50px",
     borderRadius: "20px",
   });
+  useEffect(() => {
+    setId(localStorage.getItem("id"));
+    setFirstName(localStorage.getItem("firstName"));
+    setLastName(localStorage.getItem("lastName"));
+  }, []);
 
   return (
     <main className={styles.main}>
@@ -83,16 +84,14 @@ const Update = () => {
           </ListItem>
         </List>
 
-        <Link href={"/components/read"}>
-          <Button
-            variant="contained"
-            color="success"
-            size="large"
-            onClick={updateUser}
-          >
-            Update
-          </Button>
-        </Link>
+        <Button
+          variant="contained"
+          color="success"
+          size="large"
+          onClick={updateUser}
+        >
+          Update
+        </Button>
       </Newbox>
       <Link href="/">
         <Button
